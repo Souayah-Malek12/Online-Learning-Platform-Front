@@ -1,13 +1,18 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from 'axios';
-import { extractErrorMessage, alertError, alertSuccess } from '../utilities/feedBack'; // Ensure you have this function correctly imported
+import { extractErrorMessage, alertError, alertSuccess } from '../utilities/feedBack'; // Assurez-vous que ces fonctions sont correctement importées
 
-
+// Thunk pour récupérer les détails d'un cours
 export const fetchCourseDetails = createAsyncThunk(
-    'course/fetchCourseDetails  ',
+    'course/fetchCourseDetails',
     async (id, { rejectWithValue }) => {    
         try {
-            const res = await axios.get(`${import.meta.env.VITE_API_URL}/courses/getcourseById/${id}`);
+            const token = localStorage.getItem("token");
+            const res = await axios.get(`${import.meta.env.VITE_API_URL}/courses/getcourseById/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
             return res.data.course;
         } catch (error) {
             return rejectWithValue(error.response?.data?.message || 'Failed to fetch course details');
@@ -15,44 +20,46 @@ export const fetchCourseDetails = createAsyncThunk(
     }
 );
 
-export const fetchCourses = createAsyncThunk('/courses/fectchCourses',
-    async(_,{rejectWithValue})=> {
-        try{
-            const res = await axios.get(`${import.meta.env.VITE_API_URL}/courses/getcourse`);
+// Thunk pour récupérer la liste des cours
+export const fetchCourses = createAsyncThunk(
+    'courses/fetchCourses',
+    async (_, { rejectWithValue }) => {
+        try {
+            const token = localStorage.getItem("token");
+            const res = await axios.get(`${import.meta.env.VITE_API_URL}/courses/getcourse`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
             return res.data.courses;
-        }catch(error){
-            return rejectWithValue(error.response.data);
-
+        } catch (error) {
+            return rejectWithValue(error.response?.data || 'Failed to fetch courses');
         }
     }
- )
+);
 
-
-
+// Thunk pour créer un cours
 export const requestCreatingCourse = createAsyncThunk(
     'courses/requestCreatingCourse',
-    async({ formData, navigate }, { rejectWithValue }) => {
+    async ({ formData, navigate }, { rejectWithValue }) => {
         try {
-            // const token = localStorage.getItem('token');
-            const res = await axios.post(
-                `${import.meta.env.VITE_API_URL}/courses/create`,
-                formData,
-                // {
-                //     headers: {
-                //         "Content-Type": "multipart/form-data",
-                //         Authorization: `Bearer ${token}`
-                //     }
-                // }
-            );
-            // Use navigate here for successful navigation
+            const token = localStorage.getItem("token");
+            const res = await axios.post(`${import.meta.env.VITE_API_URL}/courses/create`, formData, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            // Naviguer après la création réussie du cours
             navigate('/');
-            return res.data; // Return the response data to update the state
+            return res.data; // Retourne les données de la réponse pour mettre à jour l'état
         } catch (error) {
             const errorMessage = extractErrorMessage(error);
             return rejectWithValue(errorMessage);
         }
     }
 );
+
+// Slice pour gérer les cours
 export const courseSlice = createSlice({
     name: 'course',
     initialState: {
@@ -61,48 +68,47 @@ export const courseSlice = createSlice({
         isLoading: false,
         error: null
     },
-    reducers: { },
+    reducers: {},
     extraReducers: (builder) => {
         builder
-        .addCase(requestCreatingCourse.pending, (state) => {
-            state.isLoading = true;
-            state.error = null;
-        })
-        .addCase(requestCreatingCourse.rejected, (state, action) => {
-            state.isLoading = false;
-            state.error = action.payload || 'Failed to create course'; 
-            alertError(state.error);
-        })
-        .addCase(requestCreatingCourse.fulfilled, (state, action) => {
-            state.isLoading = false;
-            alertSuccess(action.payload.message);
-            state.courses.push(action.payload.course);
-        })
-        .addCase(fetchCourses.pending, (state) => {
-            state.isLoading = true;
-            state.error = null;
-        })
-        .addCase(fetchCourses.fulfilled, (state, action) => {
-            state.isLoading = false;
-            state.courses = action.payload;
-        })
-        .addCase(fetchCourses.rejected, (state, action) => {
-            state.isLoading = false;
-            state.error = action.payload || 'Failed to fetch courses';
-        })
-        .addCase(fetchCourseDetails.pending, (state) => {
-            state.isLoading = true;
-            state.error = null;
-        })
-        .addCase(fetchCourseDetails.fulfilled, (state, action) => {
-            console.log('Fetched course details:', action.payload);
-            state.isLoading = false;
-            state.course = action.payload;
-        })
-        .addCase(fetchCourseDetails.rejected, (state, action) => {
-            state.isLoading = false;
-            state.error = action.payload || 'Failed to fetch course details';
-        })
+            .addCase(requestCreatingCourse.pending, (state) => {
+                state.isLoading = true;
+                state.error = null;
+            })
+            .addCase(requestCreatingCourse.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload || 'Failed to create course'; 
+                alertError(state.error);
+            })
+            .addCase(requestCreatingCourse.fulfilled, (state, action) => {
+                state.isLoading = false;
+                alertSuccess(action.payload.message);
+                state.courses.push(action.payload.course);
+            })
+            .addCase(fetchCourses.pending, (state) => {
+                state.isLoading = true;
+                state.error = null;
+            })
+            .addCase(fetchCourses.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.courses = action.payload;
+            })
+            .addCase(fetchCourses.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload || 'Failed to fetch courses';
+            })
+            .addCase(fetchCourseDetails.pending, (state) => {
+                state.isLoading = true;
+                state.error = null;
+            })
+            .addCase(fetchCourseDetails.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.course = action.payload;
+            })
+            .addCase(fetchCourseDetails.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload || 'Failed to fetch course details';
+            });
     }
 });
 

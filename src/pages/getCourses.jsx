@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Container, Spinner, Alert } from 'react-bootstrap';
 import { fetchCourses } from "../store/courseSlice";
 import { Link } from 'react-router-dom';
+import CourseS from "../components/CourseS";
 
 function GetCourses() {
     const dispatch = useDispatch();
@@ -32,13 +33,9 @@ function GetCourses() {
             <div className={viewMode === "grid" ? "d-flex flex-wrap" : ""}>
                 {filteredCourses.length > 0 ? (
                     filteredCourses.map((course) => (
-                        <div
-                            key={course._id}
-                            className={`course-item ${viewMode === "grid" ? "col-md-4" : "col-md-12"} mb-3`}
-                        >
-                            <h5>{course.title}</h5>
-                            <p>{course.description}</p>
-                            <Link to={`/course/${course._id}`}>View Details</Link> 
+                    
+                        <div>
+                            <CourseS key={course._id} props={course.title, course.description, course._id} />
                         </div>
                     ))
                 ) : (

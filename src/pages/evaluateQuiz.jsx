@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { Container, Spinner, Alert } from 'react-bootstrap';
+import { Container, Spinner, Alert, Button } from 'react-bootstrap';
 import { submitQuiz } from '../store/quizSlice';
 
 const EvaluateQ = () => {
@@ -28,27 +28,20 @@ const EvaluateQ = () => {
             {result.success ? (
                 <div>
                     <div>
-                        <label htmlFor="score">Score:</label>
-                        <input
-                            type="number"
-                            id="score"
-                            value={result.score || 0}
-                            readOnly
-                        />
+                        <h4>Score:</h4>
+                        <p>{result.score || 0}</p>
                     </div>
                     <div>
-                        <label htmlFor="percentage">Percentage:</label>
-                        <input
-                            type="number"
-                            id="percentage"
-                            value={result.Percentage || 0}
-                            readOnly
-                        />
+                        <h4>Percentage:</h4>
+                        <p>{result.Percentage || 0}%</p>
                     </div>
                 </div>
             ) : (
                 <p>Evaluation failed</p>
             )}
+            <Button variant="primary" onClick={() => window.history.back()}>
+                Back to Course
+            </Button>
         </Container>
     );
 };

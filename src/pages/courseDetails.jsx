@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from 'react-router-dom';
-
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from 'react-router-dom';
 import { Container, Spinner, Alert, Form, Button } from 'react-bootstrap';
 import { fetchCourseDetails } from "../store/courseSlice";
 
@@ -10,20 +8,16 @@ const CourseDetails = () => {
     const { id } = useParams();
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
     const { course, isLoading, error } = useSelector(state => state.course);
 
-    // State to hold user answers
     const [userAnswers, setUserAnswers] = useState([]);
 
-    // Fetch course details when component mounts
     useEffect(() => {
         if (id) {
             dispatch(fetchCourseDetails(id));
         }
     }, [dispatch, id]);
 
-    // Handle changes to answers
     const handleAnswerChange = (quizIndex, questionIndex, answerIndex) => {
         const updatedAnswers = [...userAnswers];
         if (!updatedAnswers[quizIndex]) {
@@ -33,24 +27,17 @@ const CourseDetails = () => {
         setUserAnswers(updatedAnswers);
     };
 
-    // Prepare data and navigate to /evaluateQ
     const handleSubmit = (event) => {
         event.preventDefault();
-    
-        // Create an array of quiz responses
         const quizResponses = course.quizzes.map((quiz, quizIndex) => ({
-            quizId: quiz._id,
-            userAnswers: userAnswers[quizIndex] || [] // Ensure answers exist or default to empty array
+            quizIndex: quizIndex,
+            userAnswers: userAnswers[quizIndex] || []
         }));
-    
-        // Navigate to /evaluateQ with state
         navigate('/evaluateQ', { state: { quizResponses } });
     };
-    
 
-    // Render loading, error, or course details
     if (isLoading) return <Spinner animation="border" />;
-    if (error) return <Alert variant="danger">{error}</Alert>;
+    if (error) return <Alert variant="danger">An error occurred: {error.message}</Alert>;
     if (!course) return <p>No course data available</p>;
 
     return (

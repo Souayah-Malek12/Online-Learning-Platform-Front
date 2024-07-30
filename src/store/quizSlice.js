@@ -13,12 +13,20 @@ export const submitQuiz = createAsyncThunk(
     'quiz/submitQuiz',
     async (quizResponses, { rejectWithValue }) => {
         try {
+            const token = localStorage.getItem("token")
+
             const response = await axios.post(
                 `${import.meta.env.VITE_API_URL}/quizzes/evaluatequiz`,
-                { quizResponses }
+                { quizResponses },
+                {
+                    headers : {
+                        Authorization : token
+                    }
+                }
             );
             return response.data;
         } catch (error) {
+            // Extract error message or use a default message
             return rejectWithValue(error.response?.data?.message || 'Failed to submit quiz');
         }
     }
@@ -28,11 +36,14 @@ export const submitQuiz = createAsyncThunk(
 const quizSlice = createSlice({
     name: 'quiz',
     initialState,
-    reducers: {},
+    reducers: {
+        // You can define additional synchronous reducers here if needed
+    },
     extraReducers: (builder) => {
         builder
             .addCase(submitQuiz.pending, (state) => {
                 state.status = 'loading';
+                state.error = null;
             })
             .addCase(submitQuiz.fulfilled, (state, action) => {
                 state.status = 'succeeded';

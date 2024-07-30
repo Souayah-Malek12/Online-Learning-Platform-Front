@@ -5,7 +5,15 @@ import { alertError, alertSuccess, extractErrorMessage } from '../utilities/feed
 // Define the async thunk for login
 export const requestLogin = createAsyncThunk('user/requestLogin', async ({ email, motDePasse, role }, { rejectWithValue }) => {
     try {
-        const res = await axios.post(`${import.meta.env.VITE_API_URL}/auth/login`, { email, motDePasse, role });
+        const token = localStorage.getItem("token")
+
+        const res = await axios.post(`${import.meta.env.VITE_API_URL}/auth/login`, { email, motDePasse, role },
+            {
+                headers : {
+                    Authorization : token
+                }
+            }
+        );
         return res.data;
     } catch (error) {
         const errorMessage = extractErrorMessage(error);
