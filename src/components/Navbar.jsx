@@ -23,7 +23,7 @@ function Navbar() {
           <ion-icon name={open ? 'close' : 'menu'}></ion-icon>
         </div>
         <ul
-          className={`md:flex md:items-center md:pb-0 pb-12 absolute md:static bg-white md:z-auto z-[-1] left-0 w-full md:w-auto pl-9 transition-all duration-500 ease-in ${open ? 'top-20' : 'top-[-490px]'
+          className={`md:flex md:items-center md:pb-0 pb-12 absolute md:static bg-white md:z-auto z-[-1] left-0 w-full md:w-auto pl-9 transition-all mb-2 duration-500 ease-in ${open ? 'top-20' : 'top-[-490px]'
             }`}
         >
           {links.map((link) => (

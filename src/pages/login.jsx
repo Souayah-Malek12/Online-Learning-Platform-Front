@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import {useNavigate} from 'react-router-dom'
 import { requestLogin } from '../store/userSlice';
 
 const Login = () => {
@@ -10,6 +11,7 @@ const Login = () => {
     const [success, setSuccess] = useState('');
 
     const dispatch = useDispatch();
+    const navigate= useNavigate();
 
     const handleLogin = async (event) => {
         event.preventDefault();
@@ -21,6 +23,7 @@ const Login = () => {
                 setSuccess('Login successful!');
                 console.log('Login successful!')
                 setError('');
+                navigate('/')
             } else {
                 setSuccess('');
                 setError('Login failed. Please try again.');

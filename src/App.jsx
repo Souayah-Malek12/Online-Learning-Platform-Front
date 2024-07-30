@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import '../index.css'; // Import your Tailwind CSS file
 import Login from './pages/login'
 import Registre from './pages/Registre';
 import CreateCourse from './pages/createCourse';
@@ -8,7 +9,7 @@ import EvaluateQ from './pages/evaluateQuiz';
 import Chat from './pages/chat';
 import Discussion from './pages/discussion';
 import  Navbar  from './components/Navbar';
-
+import Home from './pages/Home'
 
 
 
