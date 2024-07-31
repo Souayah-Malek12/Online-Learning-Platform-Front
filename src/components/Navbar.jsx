@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Button from "./Button";
+import { NavLink } from "react-router-dom";
 
 function Navbar() {
   const links = [
@@ -16,7 +17,7 @@ function Navbar() {
         <div className="font-bold cursor-pointer flex items-center font-[poppins] text-gray-800">
           <span className="text-3xl text-indigo-600 py-4 md:px-10 px-7">
             <ion-icon name="logo-ionic"></ion-icon>
-            Online Learning Platform
+           <NavLink to="/"> Online Learning Platform</NavLink>
           </span>
         </div>
         <div onClick={() => setOpen(!open)} className="md:hidden">
@@ -27,7 +28,7 @@ function Navbar() {
             }`}
         >
           {links.map((link) => (
-            <li key={link.name} className="md:ml-8 text-xl md:my-0 my-7">
+            <li key={link.name} className="md:ml-8 text-xl md:my-0 my-7 hover:text-3xl">
               <a href={link.link} className="text-gray-800 hover:text-gray-400 duration-500">
                 {link.name}
               </a>

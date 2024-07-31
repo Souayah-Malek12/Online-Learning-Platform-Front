@@ -19,10 +19,11 @@ const CourseDetails = () => {
     }, [dispatch, id]);
 
     const getYouTubeVideoId = (url) => {
-        const regex = /(?:https?:\/\/)?(?:www\.)?youtube\.com\/(?:watch\?v=|embed\/|v\/|user\/.*\/\w+\/|.*\/\w+\/|.*\/|watch\/)?([^"&?\/\s]{11})/;
+        const regex = /(?:https?:\/\/)?(?:www\.)?youtu\.be\/([^"&?\/\s]{11})|(?:https?:\/\/)?(?:www\.)?youtube\.com\/(?:watch\?v=|embed\/|v\/|user\/.*\/\w+\/|.*\/\w+\/|.*\/|watch\/)?([^"&?\/\s]{11})/;
         const match = url.match(regex);
-        return match ? match[1] : null;
+        return match ? match[1] || match[2] : null;
     };
+    
 
     const handleAnswerChange = (quizIndex, questionIndex, answerIndex) => {
         const updatedAnswers = [...userAnswers];
@@ -53,33 +54,33 @@ const CourseDetails = () => {
                 <p className="text-lg mb-6">{course.description || 'No description available'}</p>
                 
                 <div className="mb-6">
-                    <h3 className="text-2xl font-semibold mb-2">Videos:</h3>
-                    <ul className="list-none p-0">
-                        {course.videos && course.videos.length > 0 ? (
-                            course.videos.map((video, index) => {
-                                const videoId = getYouTubeVideoId(video);
-                                return videoId ? (
-                                    <li key={index} className="mb-4">
-                                        <iframe
-                                            width="100%"
-                                            height="315"
-                                            src={`https://www.youtube.com/embed/${videoId}`}
-                                            title={`YouTube video player ${index + 1}`}
-                                            frameBorder="0"
-                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                            allowFullScreen
-                                            className="rounded-lg shadow-md"
-                                        ></iframe>
-                                    </li>
-                                ) : (
-                                    <li key={index} className="text-red-500">Invalid video URL</li>
-                                );
-                            })
-                        ) : (
-                            <li>No videos available</li>
-                        )}
-                    </ul>
-                </div>
+    <h3 className="text-2xl font-semibold mb-2">Videos:</h3>
+    <ul className="list-none p-0">
+        {course.videos && course.videos.length > 0 ? (
+            course.videos.map((video, index) => {
+                const videoId = getYouTubeVideoId(video);
+                return videoId ? (
+                    <li key={index} className="mb-4">
+                        <iframe
+                            width="100%"
+                            height="315"
+                            src={`https://www.youtube.com/embed/${videoId}`} // Use embed URL format
+                            title={`YouTube video player ${index + 1}`}
+                            frameBorder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                            className="rounded-lg shadow-md"
+                        ></iframe>
+                    </li>
+                ) : (
+                    <li key={index} className="text-red-500">Invalid video URL</li>
+                );
+            })
+        ) : (
+            <li>No videos available</li>
+        )}
+    </ul>
+</div>
 
                 <div>
                     <h3 className="text-2xl font-semibold mb-4">Quizzes:</h3>

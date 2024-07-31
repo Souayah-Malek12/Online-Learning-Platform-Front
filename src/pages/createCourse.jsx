@@ -18,13 +18,20 @@ const CreateCourse = () => {
 
     async function handleSubmit(e) {
         e.preventDefault();
-        const formData = {
-            title,
-            description,
-            videos: videos.split(',').map(url => url.trim()), // Convert to array and trim spaces
-            quizzes: quizzes ? quizzes.split(',').map(id => id.trim()) : []
-        };
-        dispatch(requestCreatingCourse({ formData, navigate }));
+        const preparedVideos = videos.split(',').map(url => url.trim());
+        const preparedQuizzes = quizzes ? quizzes.split(',').map(id => id.trim()).filter(id => id) : [];
+
+        const payload = { title, description, videos: preparedVideos, quizzes: preparedQuizzes };
+
+        console.log("Request Payload:", payload); // Log the request payload for debugging
+
+        dispatch(requestCreatingCourse( payload ))
+            .then(() => {
+                navigate('/');
+            })
+            .catch((error) => {
+                console.error("Failed to create course: ", error);
+            });
     }
 
     return (

@@ -38,27 +38,27 @@ export const fetchCourses = createAsyncThunk(
     }
 );
 
-// Thunk pour créer un cours
 export const requestCreatingCourse = createAsyncThunk(
     'courses/requestCreatingCourse',
-    async ({ formData, navigate }, { rejectWithValue }) => {
+    async ( payload, { rejectWithValue }) => {
         try {
             const token = localStorage.getItem("token");
-            const res = await axios.post(`${import.meta.env.VITE_API_URL}/courses/create`, formData, {
-                headers: {
-                    Authorization: `Bearer ${token}`
+            const res = await axios.post(
+                `${import.meta.env.VITE_API_URL}/courses/create`,
+                 payload ,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
                 }
-            });
-            // Naviguer après la création réussie du cours
-            navigate('/');
-            return res.data; // Retourne les données de la réponse pour mettre à jour l'état
+            );
+            return res.data; 
         } catch (error) {
             const errorMessage = extractErrorMessage(error);
             return rejectWithValue(errorMessage);
         }
     }
 );
-
 // Slice pour gérer les cours
 export const courseSlice = createSlice({
     name: 'course',
