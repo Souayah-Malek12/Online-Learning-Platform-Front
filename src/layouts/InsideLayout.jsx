@@ -17,7 +17,7 @@ function InsideLayout() {
             </Container>
           </>
         )
-      : <Navigate to="/login" />
+      : <Navigate to="/" />
   )
 }
 

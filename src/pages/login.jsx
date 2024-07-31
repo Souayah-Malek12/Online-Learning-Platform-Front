@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import {useNavigate} from 'react-router-dom'
 import { requestLogin } from '../store/userSlice';
+import logPic from  '../imgs/log.png'
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -38,12 +39,14 @@ const Login = () => {
 
     return (
         <form onSubmit={handleLogin}>
-            <div className='bg-white mt-4 px-10 py-20 rounded-3xl border-2 border-gray-200'>
-                <h1 className='text-5xl font-semibold'>Welcome Back</h1>
-                <p className='font-meduim text-lg text-gray-500 mt-4'>Welcome Back! Please enter your details</p>
+            <div className='bg-white mt-4 px-10 py-20 rounded-3xl border-2 border-gray-200 flex justify-center'>
+                <div>
+                    <h1 className='text-5xl font-semibold m-5 text-indigo-600 p-8'>Welcome Back<p className='font-meduim text-lg text-gray-500 mt-4'>Welcome Back! Please enter your details</p></h1>
+                    <img src={logPic} alt="Login pic"   className='m-8' />
+                </div>
                 <div className='mt-8 '>
                     <div>
-                         <label className='text-lg font-meduim'>Email address</label>
+                         <label className='text-lg font-medium'>Email address</label>
 
                         <input className='w-full  border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent '
                         type="email"

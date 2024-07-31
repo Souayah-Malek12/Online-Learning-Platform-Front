@@ -12,8 +12,7 @@ import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
 import Home from './pages/Home';
 import NotFound from './pages/NotFound';
-import InsideLayout from './layouts/InsideLayout';
-import OutsideLayout from './layouts/OutsideLayout';
+
 
 function App() {
   return (
@@ -23,22 +22,19 @@ function App() {
         <Sidebar />
         <Routes>
 
-          <Route element={OutsideLayout} >
+
             <Route path='/login' element={<Login />} />
             <Route path='/registre' element={<Registre />} />
-          </Route>
-          <Route element={< InsideLayout />} >
             <Route path='/createCourse' element={<CreateCourse />} />
             <Route path='/getCourses' element={<GetCourses />} />
             <Route path='/course/:id' element={<CourseDetails />} />
             <Route path='/evaluateQ' element={<EvaluateQ />} />
             <Route path='/chatbot' element={<Chat />} />
             <Route path='/discussion' element={<Discussion />} />
-          </Route>
-          <Route>
+          
+          
             <Route path='/' element={<Home />} />
             <Route path='*' element={<NotFound />} />
-          </Route>
         </Routes>
         
       </div>
